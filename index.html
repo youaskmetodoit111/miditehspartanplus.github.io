@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>M+</title>
+    <style>
+        body {
+            font-family: Segoe UI, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: rgb(255, 0, 0);
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        main {
+            margin: 20px;
+        }
+        .post {
+            background-color: rgb(255, 255, 255);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .post h2 {
+            margin-top: 0;
+        }
+        .post p {
+            font-size: 14px;
+        }
+        form {
+            background-color: rgb(255, 0, 0);
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #0000ff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <header>
+  <h1>Welcome to M+</h1>
+    </header>
+    <main>
+        <form id="postForm">
+            <input type="text" id="title" placeholder="Post Title" required>
+            <textarea id="content" placeholder="Post Content" required></textarea>
+            <button type="button" onclick="addPost()">Add Post</button>
+        </form>
+        <div id="posts">
+            <!-- Posts will be added here -->
+        </div>
+    </main>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            loadPosts();
+        });
+
+        function addPost() {
+            var title = document.getElementById("title").value;
+            var content = document.getElementById("content").value;
+
+            if (title && content) {
+                var posts = JSON.parse(localStorage.getItem("posts")) || [];
+
+                var newPost = {
+                    title: title,
+                    content: content
+                };
+
+                posts.push(newPost);
+                localStorage.setItem("posts", JSON.stringify(posts));
+
+                displayPost(newPost);
+
+                // Clear the form
+                document.getElementById("title").value = "";
+                document.getElementById("content").value = "";
+            }
+        }
+
+        function loadPosts() {
+            var posts = JSON.parse(localStorage.getItem("posts")) || [];
+            posts.forEach(function(post) {
+                displayPost(post);
+            });
+        }
+
+        function displayPost(post) {
+            var postsDiv = document.getElementById("posts");
+
+            var newPost = document.createElement("div");
+            newPost.className = "post";
+
+            var newTitle = document.createElement("h2");
+            newTitle.innerText = post.title;
+
+            var newContent = document.createElement("p");
+            newContent.innerText = post.content;
+
+            newPost.appendChild(newTitle);
+            newPost.appendChild(newContent);
+
+            postsDiv.appendChild(newPost);
+        }
+    </script>
+</body>
+</html>
